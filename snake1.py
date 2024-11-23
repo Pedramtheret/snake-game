@@ -206,10 +206,13 @@ class game:
 
 
     def eat(self):
+        '''
         body_copy=self.snake.body[:]
         new_head=body_copy[0]+ self.snake.direction
         body_copy.insert(0,new_head)
         self.snake.body=body_copy[:]
+        '''
+        self.snake.new_block = True
         self.fruit.set_pos(self.snake.body)
 
 
@@ -269,6 +272,7 @@ class game:
             if self.snake.body[0]==self.fruit.pos :
                 print('arrived')
                 self.eat()
+                self.snake.move()
 
                     #print(self.fruit.pos)
                 self.score()
@@ -381,6 +385,7 @@ class Snake:
         self.start_row=start_row
         self.general_column=general_column
         self.general_row=general_row
+        self.new_block = False
 
         rowno=copy.copy(general_row)
         colno=copy.copy(general_column)
@@ -392,10 +397,17 @@ class Snake:
         self.direction=pygame.Vector2(1,0) #todo: snake should not move before pressing any key
 
     def move(self):
-        body_copy=self.body[:-1]
-        new_head=body_copy[0]+ self.direction
-        body_copy.insert(0,new_head)
-        self.body=body_copy[:]
+        if not self.new_block:
+            body_copy=self.body[:-1]
+            new_head=body_copy[0]+ self.direction
+            body_copy.insert(0,new_head)
+            self.body=body_copy[:]
+        else:
+            body_copy=self.body[:]
+            new_head=body_copy[0]+ self.direction
+            body_copy.insert(0,new_head)
+            self.body=body_copy[:]
+            self.new_block = False
 
     def draw(self,screen):
         purple=(128, 0, 128)
